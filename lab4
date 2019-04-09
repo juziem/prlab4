@@ -1,0 +1,54 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Data;
+using System.Windows.Documents;
+using System.Windows.Input;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
+using System.Windows.Navigation;
+using System.Windows.Shapes;
+using System.Data.SQLite;
+
+
+namespace lab4
+{
+    /// <summary>
+    /// Логика взаимодействия для MainWindow.xaml
+    /// </summary>
+    public partial class MainWindow : Window
+    {
+        public MainWindow()
+        {
+            InitializeComponent();
+
+            SQLiteConnection.CreateFile("C:\\Users\\Admin\\Documents\\ri-89\\test_table.sql");
+            
+            SQLiteConnection m_dbConnection = new SQLiteConnection("Data Source=test_table.sql;Version=3;");
+           
+            string sql = "CREATE TABLE lab4 (name VARCHAR(20), score INT)";
+            SQLiteCommand command = new SQLiteCommand(sql, m_dbConnection);                  
+        }
+
+        private void bt_Click(object sender, RoutedEventArgs e)
+        {
+            Microsoft.Win32.OpenFileDialog dlg = new Microsoft.Win32.OpenFileDialog();
+            string db_name = dlg.FileName;
+            SQLiteConnection m_dbConnection;
+            m_dbConnection = new SQLiteConnection("Data Source=" + db_name + ";Version=3;");
+
+
+            m_dbConnection.Open();
+
+            string sql = "INSERT INTO test_table (int_field, txt_field) VALUES (" + tb1.Text + ",'" +tb2.Text + "','"+tb3.Text+",'"+tb4.Text+")";
+            SQLiteCommand command = new SQLiteCommand(sql, m_dbConnection);
+            command.ExecuteNonQuery();
+
+            m_dbConnection.Close();
+        }
+    }
+}
