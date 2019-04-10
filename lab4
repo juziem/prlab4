@@ -22,33 +22,57 @@ namespace lab4
     /// </summary>
     public partial class MainWindow : Window
     {
+        //table name - lab4
+
         public MainWindow()
         {
             InitializeComponent();
 
             SQLiteConnection.CreateFile("C:\\Users\\Admin\\Documents\\ri-89\\test_table.sql");
-            
+
             SQLiteConnection m_dbConnection = new SQLiteConnection("Data Source=test_table.sql;Version=3;");
-           
+
             string sql = "CREATE TABLE lab4 (name VARCHAR(20), score INT)";
-            SQLiteCommand command = new SQLiteCommand(sql, m_dbConnection);                  
+            SQLiteCommand command = new SQLiteCommand(sql, m_dbConnection);
         }
 
         private void bt_Click(object sender, RoutedEventArgs e)
         {
             Microsoft.Win32.OpenFileDialog dlg = new Microsoft.Win32.OpenFileDialog();
             string db_name = dlg.FileName;
+
+            SQLiteConnection m_dbConnection;
+            m_dbConnection = new SQLiteConnection("Data Source=" + db_name + ";Version=3;");
+           
+
+            m_dbConnection.Open();
+
+            string sql = "INSERT INTO lab4 (int_field, txt_field,int_field,int_field) VALUES (" + tb1.Text + ",'" + tb2.Text + "','" + tb3.Text + ",'" + tb4.Text + ")";
+            SQLiteCommand command = new SQLiteCommand(sql, m_dbConnection);
+            command.ExecuteNonQuery();
+
+            m_dbConnection.Close();
+        }
+
+        private void bt2_Click(object sender, RoutedEventArgs e)
+        {
+
+            Microsoft.Win32.OpenFileDialog dlg = new Microsoft.Win32.OpenFileDialog();
+            string db_name = dlg.FileName;
+
             SQLiteConnection m_dbConnection;
             m_dbConnection = new SQLiteConnection("Data Source=" + db_name + ";Version=3;");
 
 
             m_dbConnection.Open();
 
-            string sql = "INSERT INTO test_table (int_field, txt_field) VALUES (" + tb1.Text + ",'" +tb2.Text + "','"+tb3.Text+",'"+tb4.Text+")";
+            string sql = "UPDATE lab4 SET int_field=12 txt_field='Ivanov' WHERE int_field=5 int_field=4";
             SQLiteCommand command = new SQLiteCommand(sql, m_dbConnection);
             command.ExecuteNonQuery();
 
             m_dbConnection.Close();
         }
+
+
     }
 }
